@@ -1,0 +1,58 @@
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.0;
+contract BankAccount {
+    address public owner;
+    uint256 public balance;
+    constructor() {
+        owner = msg.sender;
+        balance = 0;
+    }
+    modifier onlyOwner() {
+        require(msg.sender == owner);
+        _;
+    }
+    function deposit(uint256 amount) public onlyOwner {
+        require(amount > 0);
+        balance += amount;
+    }
+
+    function withdraw(uint256 amount) public onlyOwner {
+        require(amount > 0);
+        require(amount <= balance);
+        balance -= amount;
+    }
+    
+    function getBalance() public view returns (uint256) {
+        return balance;
+    }
+}
+
+
+
+
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.0;
+contract StudentData {
+    struct Student {
+        string name;
+        uint256 rollNumber;
+        uint256 age;
+    }
+    Student[] public students;
+    constructor() {}
+
+    function addStudent(string memory _name, uint256 _rollNumber, uint256 _age) public {
+        Student memory newStudent = Student(_name, _rollNumber, _age);
+        students.push(newStudent);
+    }
+
+    function getStudentCount() public view returns (uint256) {
+        return students.length;
+    }
+
+    function getStudent(uint256 index) public view returns (string memory, uint256, uint256) {
+        require(index < students.length);
+        Student memory student = students[index];
+        return (student.name, student.rollNumber, student.age);
+    }
+}
